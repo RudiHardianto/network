@@ -2,25 +2,52 @@
   <x-container>
     <div class="grid grid-cols-12 gap-6">
       <div class="col-span-7">
-        <div class="space-y-6">
-          <div class="border rounded-xl p-5 space-y-5">
-            @foreach ($statuses as $status)
-              <div class="flex">
-                <div class="flex-shrink-0 mr-3">
-                  <img class="h-15 w-15 rounded-full" src="https://i.pravatar.cc/50" alt="{{ $status->user->name }}">
+        <div class="border rounded-xl p-5 ">
+          <form action="{{ route('status.store') }}" method="post">
+            @csrf
+            <div class="flex">
+              <div class="flex-shrink-0 mr-3">
+                <img class="h-15 w-15 rounded-full" src="{{ Auth::user()->gravatar() }}"
+                  alt="{{ Auth::user()->name }}">
+              </div>
+              <div class="w-full">
+                <div class="font-semibold">
+                  {{ Auth::user()->name }}
                 </div>
-                <div>
-                  <div class="font-semibold">
-                    {{ $status->user->name }}
-                  </div>
-                  <div class="leading-relaxed">
-                    {{ $status->body }}
-                  </div>
-                  <div class="text-sm text-gray-600">
-                    {{ $status->created_at->diffForHumans() }}
-                  </div>
+                <div class="my-2">
+                  <textarea name="body" id="body" placeholder="What is on your mine ?"
+                    class="w-full border-gray-300 rounded-xl resize-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-200"></textarea>
+                </div>
+                <div class="text-right">
+                  <x-button>Post</x-button>
                 </div>
               </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="space-y-6 mt-5">
+          <div class="space-y-5">
+            @foreach ($statuses as $status)
+              <x-card>
+                <div class="flex">
+                  <div class="flex-shrink-0 mr-3">
+                    <img class="h-15 w-15 rounded-full" src="{{ $status->user->gravatar() }}"
+                      alt="{{ $status->user->name }}">
+                  </div>
+                  <div>
+                    <div class="font-semibold">
+                      {{ $status->user->name }}
+                    </div>
+                    <div class="leading-relaxed">
+                      {{ $status->body }}
+                    </div>
+                    <div class="text-sm text-gray-600">
+                      {{ $status->created_at->diffForHumans() }}
+                    </div>
+                  </div>
+                </div>
+              </x-card>
             @endforeach
           </div>
         </div>
@@ -33,7 +60,8 @@
     as $user)
               <div class="flex items-center">
                 <div class="flex-shrink-0 mr-3">
-                  <img class="h-15 w-15 rounded-full" src="https://i.pravatar.cc/50" alt="{{ $user->name }}">
+                  <img class="h-15 w-15 rounded-full" src="{{ $status->user->gravatar() }}"
+                    alt="{{ $user->name }}">
                 </div>
                 <div>
                   <div class="font-semibold">
